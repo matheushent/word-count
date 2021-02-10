@@ -55,7 +55,7 @@ The Docker image is based in the [tiangolo/uvicorn-gunicorn-fastapi](https://hub
 
 ### API Information
 There is an automatic interactive API documentation (provided by Swagger UI) in the `/docs`.
-In this documentation is possible to attach a file and make a POST request agains the API to manually test the service, and shows all the information about the API.
+In this documentation is possible to attach a file and make a POST request against the API to manually test the service, and shows all the information about the API.
 
 There is also the alternative automatic documentation (provided by ReDoc) in the `/redoc`.
 
