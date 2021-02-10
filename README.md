@@ -24,7 +24,12 @@ $ source venv/bin/activate
 (venv) $ pytest
 (venv) $ gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker
 ```
-It is also possible to use Docker to run the tests:
+
+#### Note
+The above command to run using gunicorn exposes the default port, check the service in `localhost:8000/docs`.
+
+
+### Use Docker to run the tests
 
 #### Build the image:
 
@@ -39,6 +44,9 @@ $ sudo docker run --name word_count --publish 80:80 word-count:v1
 $ sudo docker exec -it word_count pytest
 ```
 
+#### Note
+The above command run using an optimized config for gunicorn and exposes the port 80.
+
 There is also an image in the dockerhub: `zsinx6/word-count` if needed.
 
 #### Docker Image Information
@@ -47,9 +55,9 @@ The Docker image is based in the [tiangolo/uvicorn-gunicorn-fastapi](https://hub
 
 ### API Information
 There is an automatic interactive API documentation (provided by Swagger UI) in the `/docs`.
-In this documentation is possible to attach a file and make a POST request agains the API to manually test the service.
+In this documentation is possible to attach a file and make a POST request agains the API to manually test the service, and shows all the information about the API.
 
-There is also the alternative automatic documentation (provided by ReDoc) in the `/redoc`
+There is also the alternative automatic documentation (provided by ReDoc) in the `/redoc`.
 
 #### Using the API
 First create a file with some text, then make a POST request in `/wc/`:
@@ -66,4 +74,5 @@ The response for the above request is:
 ```
 
 #### Note
-For the above test to work, the Docker container must be running, check [here](#test-the-project-locally).
+For the above test to work, the Docker container must be running, check [here](#use-docker-to-run-the-tests).
+If don't want to use Docker, then add the port 8000 in the `curl` command (e.g. `http://localhost:8000/wc/`).
