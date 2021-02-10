@@ -1,6 +1,23 @@
 import pytest
+from fastapi.testclient import TestClient
 
-from app.main import count_words
+from app.main import app, count_words
+
+
+client = TestClient(app)
+
+
+def test_read_main():
+    files = {"file": ("testfile.txt", "the data")}
+    response = client.post("/wc/", files=files)
+    response_data = response.json()
+    assert response.status_code == 200
+    assert response_data.get("word_count") == 2
+
+
+def test_read_main_without_file():
+    response = client.post("/wc/")
+    assert response.status_code == 422
 
 
 @pytest.mark.parametrize("file_contents,expected_word_count", [
