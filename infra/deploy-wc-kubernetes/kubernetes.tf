@@ -78,3 +78,24 @@ resource "kubernetes_deployment" "wc" {
     }
   }
 }
+
+resource "kubernetes_service" "wc" {
+  metadata {
+    name = "wc"
+  }
+  spec {
+    selector = {
+      App = kubernetes_deployment.wc.spec.0.template.0.metadata[0].labels.App
+    }
+    port {
+      port        = 80
+      target_port = 80
+    }
+
+    type = "LoadBalancer"
+  }
+}
+
+output "lb_ip" {
+  value = kubernetes_service.wc.status.0.load_balancer.0.ingress.0.hostname
+}
