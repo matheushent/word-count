@@ -43,3 +43,38 @@ provider "kubernetes" {
     ]
   }
 }
+
+resource "kubernetes_deployment" "wc" {
+  metadata {
+    name = "scalable-word-count"
+    labels = {
+      App = "ScalableWordCount"
+    }
+  }
+
+  spec {
+    replicas = 2
+    selector {
+      match_labels = {
+        App = "ScalableWordCount"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          App = "ScalableWordCount"
+        }
+      }
+      spec {
+        container {
+          image = "zsinx6/word-count:v1"
+          name  = "word-count"
+
+          port {
+            container_port = 80
+          }
+        }
+      }
+    }
+  }
+}
