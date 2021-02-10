@@ -79,7 +79,7 @@ If don't want to use Docker, then add the port 8000 in the `curl` command (e.g. 
 
 ## Infrastructure as Code Instructions
 
-The deploy of the infra is in two phases, first we deploy the Kubernetes cluster in the AWS EKS, along with all the needed AWS services (vpc, security groups), then we deploy the service inside the k8s cluster (using the Docker image build from the `service` folder's Dockerfile).
+The deploy of the infra is in two phases, first we deploy the Kubernetes cluster in the AWS EKS, along with all the needed AWS services (vpc, security groups), then we deploy the service inside the EKS cluster (using the Docker image build from the word-count service folder's Dockerfile).
 
 In the `deploy-cluster` folder is the workspace for the EKS cluster:
 - `vpc.tf` provisions a VPC, subnets and availability zones using the AWS VPC Module.
@@ -90,10 +90,10 @@ In the `deploy-cluster` folder is the workspace for the EKS cluster:
 - `kubernetes.tf` the Kubernetes provider is included in this file so the EKS module can complete successfully. Otherwise, it throws an error when creating `kubernetes_config_map.aws_auth`.
 
 In the `deploy-wc-kubernetes` folder is the workspace for the service to run inside the EKS cluster:
-- `kubernetes.tf` the real Kubernetes provider, which deploys the `wc` service using the Docker image (`zsinx6/word-count`) created for the `service` hosted [here](https://hub.docker.com/repository/docker/zsinx6/word-count), there is also a LoadBalancer, which routes the traffic from the external load balancer to pods matching the selector (in this case, the `service`). The output is definied to return the external ip address of the service.
+- `kubernetes.tf` the Kubernetes provider, which deploys the `wc` service using the Docker image (`zsinx6/word-count`) created for the word-count service hosted [here](https://hub.docker.com/repository/docker/zsinx6/word-count), there is also a LoadBalancer, which routes the traffic from the external load balancer to pods matching the selector (in this case, the `service`). The output is defined to return the external ip address of the service.
 
 ### Deploy Instructions
-**Warning: there could be charges when running this, since the deploy is at AWS** 
+**Warning: there could be charges when running this, since the deploy is at AWS**
 
 Since the project uses AWS, it is expected to have the aws-cli already installed and configured (see [here](https://docs.aws.amazon.com/cli/index.html) for detailed information).
 
@@ -130,7 +130,7 @@ $ terraform init
 $ terraform apply
 ```
 
-Now the deploy is complete, and the `service` should already be available, the above command outputs the address for the service.
+Now the deploy is complete, and the word-count service should already be available, the above command outputs the ip address for the service.
 
 To check the running services (this commands also display the external-IP):
 
@@ -144,7 +144,7 @@ There are 2 ways to upgrade the running image:
 For both we need to change the service source code, rebuild the Docker image using an updated tag for the version and push the image to a registry (e.g. dockerhub).
 The first one is the recommended, since we can use the `kubectl` directly.
 
-Then we can run the following command to update the deployment inside the Kubernetes cluster:
+Then we can run the following command to update the deployment inside the EKS cluster:
 
 ```bash
 $ kubectl set image deployments/scalable-word-count word-count=zsinx6/word-count:v2
