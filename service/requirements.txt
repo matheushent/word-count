@@ -1,5 +1,8 @@
 attrs==20.3.0
+certifi==2020.12.5
+chardet==4.0.0
 fastapi==0.63.0
+idna==2.10
 iniconfig==1.1.1
 packaging==20.9
 pluggy==0.13.1
@@ -8,6 +11,8 @@ pydantic==1.7.3
 pyparsing==2.4.7
 pytest==6.2.2
 python-multipart==0.0.5
+requests==2.25.1
 six==1.15.0
 starlette==0.13.6
 toml==0.10.2
+urllib3==1.26.3
